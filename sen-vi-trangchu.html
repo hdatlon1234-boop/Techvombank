@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Ví cá nhân — Trang chủ</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#B4291B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root{
+    --bg-top:#FFF3F1;
+    --bg-bottom:#FBD9D3;
+    --mountain-1:#F3A79A;
+    --mountain-2:#E8776A;
+    --mountain-3:#C63B2E;
+    --gold:#D64C3A;
+    --gold-dark:#B4291B;
+    --ink:#2A1613;
+    --muted:#8C6A65;
+    --card:#FFFFFF;
+    --line:rgba(180,41,27,0.10);
+    --pill-dark:#B4291B;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#081712;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    padding:24px 12px;
+    min-height:100vh;
+  }
+  .phone{
+    width:100%;
+    max-width:400px;
+    background:var(--bg-top);
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,0.45);
+    position:relative;
+  }
+
+  /* ---------- status/header ---------- */
+  .statusbar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 20px 0;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 20px 0;
+    position:relative;
+    z-index:3;
+  }
+  .avatar{
+    width:48px; height:48px; border-radius:50%;
+    background:linear-gradient(160deg,#FFFFFF,#E7847A);
+    display:flex; align-items:center; justify-content:center;
+    color:#5A1108; font-weight:600; font-size:15px;
+    border:2px solid rgba(255,255,255,0.6);
+  }
+  .header-icons{ display:flex; gap:10px; }
+  .icon-circle{
+    width:40px; height:40px; border-radius:50%;
+    background:rgba(255,255,255,0.55);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .icon-circle svg{ width:18px; height:18px; stroke:var(--ink); }
+  .badge{
+    position:absolute; top:-3px; right:-3px;
+    background:#C0432F; color:#fff;
+    font-size:10px; font-weight:700;
+    width:17px; height:17px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    border:2px solid var(--bg-top);
+  }
+
+  /* ---------- background scenery (signature element) ---------- */
+  .scenery{
+    position:relative;
+    height:230px;
+    margin-top:-10px;
+  }
+  .scenery svg{ position:absolute; bottom:0; left:0; width:100%; height:100%; }
+
+  /* ---------- balance card ---------- */
+  .balance-card{
+    position:relative;
+    z-index:3;
+    margin:-190px 20px 0;
+    background:var(--card);
+    border-radius:20px;
+    box-shadow:0 14px 30px rgba(20,40,25,0.14);
+    overflow:hidden;
+  }
+  .balance-top{ padding:20px 22px 18px; }
+  .balance-label{
+    font-size:13.5px; color:var(--muted);
+  }
+  .balance-row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:8px;
+  }
+  .balance-amount{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:24px; letter-spacing:2px;
+    font-variant-numeric:tabular-nums;
+  }
+  .eye-btn{ background:none; border:none; padding:4px; cursor:pointer; }
+  .eye-btn svg{ width:19px; height:19px; stroke:var(--muted); }
+
+  .balance-bottom{
+    background:linear-gradient(160deg,#FFFFFF,#FBE2DE);
+    padding:20px 22px 22px;
+  }
+  .balance-bottom h3{
+    margin:0 0 8px; font-size:19px; font-weight:700;
+  }
+  .balance-bottom p{
+    margin:0 0 16px; font-size:13.5px; line-height:1.55; color:#3B3626;
+  }
+  .cta-pill{
+    display:inline-block;
+    background:var(--pill-dark); color:#fff;
+    font-size:13.5px; font-weight:600;
+    padding:10px 18px; border-radius:24px;
+    border:none; cursor:pointer;
+  }
+
+  /* floating point badge */
+  .point-badge{
+    position:absolute;
+    left:12px; top:180px;
+    z-index:4;
+    display:flex; flex-direction:column; align-items:center;
+    background:#FFFFFF;
+    border-radius:16px;
+    padding:8px 10px 7px;
+    box-shadow:0 8px 18px rgba(20,40,25,0.18);
+    text-align:center;
+  }
+  .point-badge .lotus{ width:26px; height:26px; margin-bottom:2px; }
+  .point-badge .t1{ font-size:10.5px; font-weight:700; color:var(--gold-dark); line-height:1.25; }
+  .point-badge .t2{ font-size:10.5px; font-weight:700; color:#C0432F; line-height:1.25; }
+
+  /* ---------- quick actions ---------- */
+  .actions-wrap{ padding:26px 20px 0; }
+  .actions{
+    background:rgba(255,255,255,0.55);
+    border-radius:20px;
+    padding:18px 12px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:6px;
+  }
+  .action{
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    background:none; border:none; color:var(--ink);
+    font-size:10.8px; line-height:1.3;
+    cursor:pointer;
+  }
+  .action .circle{
+    width:44px; height:44px; border-radius:50%;
+    background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 2px 6px rgba(20,40,25,0.08);
+  }
+  .action .circle svg{ width:19px; height:19px; stroke:var(--gold-dark); }
+
+  /* ---------- promo banner ---------- */
+  .promo-banner{
+    margin:18px 20px 0;
+    border-radius:16px;
+    background:linear-gradient(100deg,#FFFFFF 0%,#FFF3F0 45%,#F4B3A6 100%);
+    padding:16px 18px;
+    display:flex; align-items:center; justify-content:space-between;
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(192,67,47,0.15);
+  }
+  .promo-banner .txt{ color:#C0432F; font-size:15px; font-weight:700; z-index:2; }
+  .promo-banner .big{
+    font-family:Georgia,serif;
+    color:#C0432F;
+    font-size:34px; font-weight:700;
+    z-index:2;
+  }
+  .promo-star{
+    width:26px; height:26px;
+    display:flex; align-items:center; justify-content:center;
+    z-index:2;
+  }
+  .promo-star svg{ width:22px; height:22px; fill:#C0432F; }
+  .promo-close{
+    position:absolute; top:8px; right:8px;
+    width:20px; height:20px; border-radius:50%;
+    background:rgba(192,67,47,0.12);
+    display:flex; align-items:center; justify-content:center;
+    z-index:3; border:none; cursor:pointer;
+  }
+  .promo-close svg{ width:11px; height:11px; stroke:#C0432F; }
+
+  /* ---------- section ---------- */
+  .section-title{
+    padding:22px 20px 14px;
+    font-size:17px; font-weight:700;
+    background:#FFF8F7;
+  }
+  .for-you{
+    background:#FFF8F7;
+    padding:0 20px 20px;
+    min-height:60px;
+  }
+
+  /* ---------- bottom nav ---------- */
+  .bottomnav{
+    display:flex; justify-content:space-between;
+    background:#fff;
+    padding:12px 14px 10px;
+    border-top:1px solid var(--line);
+  }
+  .nav-item{
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    font-size:10.5px; color:var(--muted);
+    flex:1;
+  }
+  .nav-item.active{ color:var(--gold-dark); font-weight:600; }
+  .nav-item svg{ width:21px; height:21px; stroke:currentColor; }
+  .home-underline{
+    height:3px; width:34px; border-radius:2px;
+    background:var(--gold-dark);
+    margin:0 auto; opacity:0;
+  }
+  .nav-item.active .home-underline{ opacity:1; }
+
+  /* ---------- lock screen ---------- */
+  #app-content{ display:none; }
+  .lock-screen{
+    min-height:640px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:40px 30px;
+    background:linear-gradient(180deg,var(--bg-top),var(--bg-bottom));
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .lock-bg{
+    position:absolute; inset:0; z-index:0;
+    pointer-events:none;
+  }
+  .lock-screen > *:not(.lock-bg){ position:relative; z-index:1; }
+  .lock-logo{ width:52px; height:52px; margin-bottom:10px; }
+  .lock-title{ font-size:18px; font-weight:700; margin:0 0 4px; }
+  .lock-sub{ font-size:13px; color:var(--muted); margin:0 0 30px; }
+  .lock-dots{
+    display:flex; gap:14px; margin-bottom:34px;
+  }
+  .lock-dot{
+    width:14px; height:14px; border-radius:50%;
+    border:1.5px solid var(--gold-dark);
+    background:transparent;
+    transition:background 0.15s;
+  }
+  .lock-dot.filled{ background:var(--gold-dark); }
+  .lock-dots.shake{ animation:shake 0.4s; }
+  @keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-8px); }
+    40%{ transform:translateX(8px); }
+    60%{ transform:translateX(-6px); }
+    80%{ transform:translateX(6px); }
+  }
+  .lock-error{
+    font-size:12.5px; color:#C0432F; height:16px; margin:-22px 0 18px;
+  }
+  .keypad{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    width:100%;
+    max-width:260px;
+  }
+  .key{
+    aspect-ratio:1;
+    border-radius:50%;
+    border:none;
+    background:rgba(255,255,255,0.6);
+    font-size:20px;
+    font-weight:600;
+    color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .key:active{ background:rgba(255,255,255,0.95); }
+  .key.ghost{ background:none; box-shadow:none; }
+  .key.ghost svg{ width:20px; height:20px; stroke:var(--ink); }
+
+  /* ---------- QR scanner overlay ---------- */
+  .qr-overlay{
+    position:absolute; inset:0;
+    z-index:50;
+    background:#000;
+    display:none;
+    flex-direction:column;
+  }
+  .qr-overlay.open{ display:flex; }
+  .qr-video{
+    flex:1;
+    width:100%;
+    object-fit:cover;
+    background:#000;
+  }
+  .qr-topbar{
+    position:absolute; top:0; left:0; right:0;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 16px 0;
+    z-index:2;
+  }
+  .qr-topbar .title{ color:#fff; font-size:14px; font-weight:600; }
+  .qr-close{
+    width:34px; height:34px; border-radius:50%;
+    background:rgba(255,255,255,0.2);
+    border:none; display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .qr-close svg{ width:16px; height:16px; stroke:#fff; }
+  .qr-frame{
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:220px; height:220px;
+    z-index:2;
+  }
+  .qr-frame::before, .qr-frame::after,
+  .qr-frame span::before, .qr-frame span::after{
+    content:"";
+    position:absolute;
+    width:32px; height:32px;
+    border:3px solid #fff;
+  }
+  .qr-frame::before{ top:0; left:0; border-right:none; border-bottom:none; border-radius:8px 0 0 0; }
+  .qr-frame::after{ top:0; right:0; border-left:none; border-bottom:none; border-radius:0 8px 0 0; }
+  .qr-frame span::before{ bottom:0; left:0; border-right:none; border-top:none; border-radius:0 0 0 8px; }
+  .qr-frame span::after{ bottom:0; right:0; border-left:none; border-top:none; border-radius:0 0 8px 0; }
+  .qr-hint{
+    position:absolute; bottom:60px; left:0; right:0;
+    text-align:center; color:#fff; font-size:13px;
+    z-index:2;
+  }
+  .qr-status{
+    position:absolute; bottom:0; left:0; right:0;
+    background:rgba(0,0,0,0.7);
+    color:#fff; font-size:12.5px;
+    text-align:center;
+    padding:14px 20px;
+    z-index:2;
+    display:none;
+  }
+  .qr-status.show{ display:block; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <div class="lock-screen" id="lockScreen">
+    <svg class="lock-bg" viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice">
+      <circle cx="40" cy="70" r="120" fill="#FFFFFF" opacity="0.5"/>
+      <circle cx="380" cy="560" r="160" fill="#E7847A" opacity="0.35"/>
+      <circle cx="360" cy="90" r="60" fill="#C63B2E" opacity="0.15"/>
+      <circle cx="30" cy="580" r="90" fill="#FFFFFF" opacity="0.4"/>
+      <path d="M0 260 Q100 220 200 260 T400 260 V640 H0 Z" fill="#FFFFFF" opacity="0.3"/>
+    </svg>
+    <svg class="lock-logo" viewBox="0 0 24 24" fill="none" stroke="#C0432F" stroke-width="1.3">
+      <path d="M12 21c-4-2-7-6-7-10a7 7 0 0 1 14 0c0 4-3 8-7 10Z"/>
+      <path d="M12 11c-2-2-2-5 0-7 2 2 2 5 0 7Z"/>
+    </svg>
+    <p class="lock-title">Ví cá nhân</p>
+    <p class="lock-sub">Nhập mật khẩu để tiếp tục</p>
+    <div class="lock-dots" id="lockDots">
+      <div class="lock-dot"></div>
+      <div class="lock-dot"></div>
+      <div class="lock-dot"></div>
+      <div class="lock-dot"></div>
+      <div class="lock-dot"></div>
+      <div class="lock-dot"></div>
+    </div>
+    <div class="lock-error" id="lockError"></div>
+    <div class="keypad" id="keypad">
+      <button class="key" data-k="1">1</button>
+      <button class="key" data-k="2">2</button>
+      <button class="key" data-k="3">3</button>
+      <button class="key" data-k="4">4</button>
+      <button class="key" data-k="5">5</button>
+      <button class="key" data-k="6">6</button>
+      <button class="key" data-k="7">7</button>
+      <button class="key" data-k="8">8</button>
+      <button class="key" data-k="9">9</button>
+      <div></div>
+      <button class="key" data-k="0">0</button>
+      <button class="key ghost" id="backspaceBtn" aria-label="Xoá">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1Z"></path><path d="M14 10l-4 4M10 10l4 4"></path></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="app-content">
+
+  <div class="header">
+    <div class="avatar">HT</div>
+    <div class="header-icons">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      </div>
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+        <span class="badge">2</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scenery">
+    <svg viewBox="0 0 400 230" preserveAspectRatio="none">
+      <rect x="0" y="0" width="400" height="230" fill="var(--bg-bottom)"/>
+      <path d="M0 150 L70 70 L130 130 L190 55 L260 140 L330 90 L400 150 L400 230 L0 230 Z" fill="var(--mountain-1)" opacity="0.8"/>
+      <path d="M0 190 L90 110 L160 165 L230 100 L300 175 L400 120 L400 230 L0 230 Z" fill="var(--mountain-2)" opacity="0.9"/>
+      <path d="M0 215 L100 160 L180 200 L260 150 L340 205 L400 175 L400 230 L0 230 Z" fill="var(--mountain-3)"/>
+    </svg>
+  </div>
+
+  <div class="point-badge">
+    <svg class="lotus" viewBox="0 0 24 24" fill="none" stroke="#C0432F" stroke-width="1.5">
+      <path d="M12 21c-4-2-7-6-7-10a7 7 0 0 1 14 0c0 4-3 8-7 10Z"/>
+      <path d="M12 11c-2-2-2-5 0-7 2 2 2 5 0 7Z"/>
+    </svg>
+    <div class="t1">Tích điểm</div>
+    <div class="t2">Đổi quà hay</div>
+  </div>
+
+  <div class="balance-card">
+    <div class="balance-top">
+      <div class="balance-label">Số dư hiện có</div>
+      <div class="balance-row">
+        <div class="balance-amount" id="balanceAmount">••••••••</div>
+        <button class="eye-btn" id="eyeBtn" aria-label="Ẩn/hiện số dư">
+          <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="balance-bottom">
+      <h3>Hưởng lợi mỗi ngày</h3>
+      <p>Số dư của bạn sinh lời tự động theo ngày, tích luỹ đều đặn không cần thao tác gì thêm.</p>
+      <button class="cta-pill">Kích hoạt ngay</button>
+    </div>
+  </div>
+
+  <div class="actions-wrap">
+    <div class="actions">
+      <button class="action">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg></div>
+        Gửi tiết kiệm
+      </button>
+      <button class="action">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"></path><path d="M4 9h16"></path></svg></div>
+        Thanh toán hóa đơn
+      </button>
+      <button class="action" id="qrBtn">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+        Quét mã QR
+      </button>
+      <button class="action">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+        Sinh lời tự động
+      </button>
+      <button class="action">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></div>
+        Tính năng khác
+      </button>
+    </div>
+  </div>
+
+  <div class="promo-banner">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div class="promo-star">
+        <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.9 7.4.6-5.6 4.9 1.8 7.2L12 17.8 5.5 21.6l1.8-7.2L1.7 9.5l7.4-.6L12 2Z"></path></svg>
+      </div>
+      <div class="txt">Vui lễ ngập quà</div>
+    </div>
+    <div class="big">2.9</div>
+    <button class="promo-close" aria-label="Đóng">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  </div>
+
+  <div class="section-title">Dành cho bạn</div>
+  <div class="for-you"></div>
+
+  <div class="bottomnav">
+    <div class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path></svg>
+      Trang chủ
+      <div class="home-underline"></div>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+      Tài khoản & Thẻ
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16V4M3 8l4-4 4 4"></path><path d="M17 8v12M21 16l-4 4-4-4"></path></svg>
+      Chuyển tiền
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v8H4v-8"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7c-1.5-3-6-3-6 0s4.5 3 6 0Z"></path><path d="M12 7c1.5-3 6-3 6 0s-4.5 3-6 0Z"></path></svg>
+      Ưu đãi
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg>
+      Tổng quan
+    </div>
+  </div>
+
+  </div>
+
+  <div class="qr-overlay" id="qrOverlay">
+    <video class="qr-video" id="qrVideo" autoplay playsinline muted></video>
+    <div class="qr-topbar">
+      <div class="title">Quét mã QR</div>
+      <button class="qr-close" id="qrCloseBtn" aria-label="Đóng">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </div>
+    <div class="qr-frame"><span></span></div>
+    <div class="qr-hint">Đưa mã QR vào giữa khung hình</div>
+    <div class="qr-status" id="qrStatus"></div>
+  </div>
+
+</div>
+
+<script>
+  // ---------- Lock screen ----------
+  const CORRECT_PASSWORD = "248624";
+  let entered = "";
+  const dotsWrap = document.getElementById("lockDots");
+  const dots = dotsWrap.querySelectorAll(".lock-dot");
+  const errorEl = document.getElementById("lockError");
+
+  function renderDots(){
+    dots.forEach((d, i) => d.classList.toggle("filled", i < entered.length));
+  }
+
+  function tryUnlock(){
+    if(entered === CORRECT_PASSWORD){
+      document.getElementById("lockScreen").style.display = "none";
+      document.getElementById("app-content").style.display = "block";
+    } else {
+      errorEl.textContent = "Mật khẩu không đúng, thử lại.";
+      dotsWrap.classList.add("shake");
+      setTimeout(() => {
+        dotsWrap.classList.remove("shake");
+        entered = "";
+        renderDots();
+      }, 380);
+    }
+  }
+
+  document.getElementById("keypad").addEventListener("click", (e) => {
+    const keyBtn = e.target.closest(".key");
+    if(!keyBtn) return;
+    errorEl.textContent = "";
+
+    if(keyBtn.id === "backspaceBtn"){
+      entered = entered.slice(0, -1);
+      renderDots();
+      return;
+    }
+
+    const digit = keyBtn.dataset.k;
+    if(digit === undefined) return;
+    if(entered.length >= 6) return;
+
+    entered += digit;
+    renderDots();
+
+    if(entered.length === 6){
+      setTimeout(tryUnlock, 120);
+    }
+  });
+
+  // ---------- Main app ----------
+  let hidden = true;
+  const amounts = { current: "1.828.700 ₫" };
+
+  document.getElementById("eyeBtn").addEventListener("click", () => {
+    hidden = !hidden;
+    document.getElementById("balanceAmount").textContent = hidden ? "••••••••" : amounts.current;
+    const icon = document.getElementById("eyeIcon");
+    icon.innerHTML = hidden
+      ? '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle>'
+      : '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a19.4 19.4 0 0 1 5-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a19.4 19.4 0 0 1-2.16 3.19"></path><path d="M1 1l22 22"></path><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>';
+  });
+
+  document.querySelector(".promo-close").addEventListener("click", (e) => {
+    e.currentTarget.closest(".promo-banner").style.display = "none";
+  });
+
+  // ---------- QR camera (chỉ kết nối camera, chưa giải mã) ----------
+  const qrOverlay = document.getElementById("qrOverlay");
+  const qrVideo = document.getElementById("qrVideo");
+  const qrStatus = document.getElementById("qrStatus");
+  let qrStream = null;
+
+  async function openQr(){
+    qrOverlay.classList.add("open");
+    qrStatus.classList.remove("show");
+    qrStatus.textContent = "";
+
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      qrStatus.textContent = "Trình duyệt này không hỗ trợ truy cập camera.";
+      qrStatus.classList.add("show");
+      return;
+    }
+
+    try{
+      qrStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" }
+      });
+      qrVideo.srcObject = qrStream;
+    }catch(err){
+      qrStatus.textContent = "Không thể truy cập camera. Hãy cấp quyền camera cho trang này rồi thử lại.";
+      qrStatus.classList.add("show");
+    }
+  }
+
+  function closeQr(){
+    if(qrStream){
+      qrStream.getTracks().forEach(t => t.stop());
+      qrStream = null;
+    }
+    qrVideo.srcObject = null;
+    qrOverlay.classList.remove("open");
+  }
+
+  document.getElementById("qrBtn").addEventListener("click", openQr);
+  document.getElementById("qrCloseBtn").addEventListener("click", closeQr);
+</script>
+
+</body>
+</html>
