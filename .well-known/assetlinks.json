@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.hdatlon1234_boop.twa",
+        "sha256_cert_fingerprints": ["F5:EB:49:17:AF:9A:6F:78:F6:1F:3C:87:08:EC:DC:8D:32:99:1B:23:02:74:4C:4C:C1:55:9A:E9:AE:93:88:CF"]
+      }
+    }]
